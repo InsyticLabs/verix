@@ -1,0 +1,41 @@
+# Verix Security Report
+
+**Version:** {{ version }}
+**Scan time:** {{ scan_time }}
+**Directory:** {{ meta.get("root_dir", "unknown") }}
+**Scanners:** {{ meta.get("scanners", []) | join(", ") }}
+
+## Summary
+
+| Severity | Count |
+|----------|-------|
+| Critical | {{ by_severity.critical }} |
+| High     | {{ by_severity.high }} |
+| Medium   | {{ by_severity.medium }} |
+| Low      | {{ by_severity.low }} |
+| Info     | {{ by_severity.info }} |
+
+**Total findings: {{ total }}**
+
+{% if findings %}
+## Findings
+
+{% for f in findings %}
+### {{ f.vx_id }}: {{ f.message }}
+
+**Severity:** {{ f.severity | upper }}
+**File:** {{ f.location.path }}{% if f.location.line_start %} (line {{ f.location.line_start }}){% endif %}
+**Scanner:** {{ f.scanner.tool }} — {{ f.scanner.rule_id }}
+{% if f.metadata and f.metadata.get("cwe") %}**CWE:** {{ f.metadata.cwe | join(", ") }}{% endif %}
+{% if f.metadata and f.metadata.get("owasp") %}**OWASP:** {{ f.metadata.owasp | join(", ") }}{% endif %}
+
+{% if f.evidence %}
+**Evidence:**
+{{ f.evidence }}
+{% endif %}
+
+---
+{% endfor %}
+{% else %}
+No findings. Your code looks clean.
+{% endif %}

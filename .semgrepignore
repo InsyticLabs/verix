@@ -1,0 +1,7 @@
+# Test fixtures and mocks are not production code
+tests/
+
+# Cache and build artifacts
+.verix/
+dist/
+.venv/
